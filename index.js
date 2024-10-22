@@ -12,15 +12,39 @@ const port = process.env.PORT || 3005;
 
 const app = express();
 
-
+app.use(express.json());
 app.use("/api/v1/user",userRouter);
 app.use("/api/v1/admin",adminRouter);
 app.use("/api/v1/course",courseRouter);
 
  
 
-  app.listen(port,()=>{
-    console.log(`Server is running at port ${port}`);
-  });
+
+async function main(){
+
+  const db_url = process.env.MONGO_URI;
+    try{
+        // first connect the database
+         await mongoose.connect(db_url)
+        console.log("database successfully connected");
+
+        // then server should run
+        app.listen(port,()=>{
+          console.log(`Server is running at port ${port}`);
+        });
+      
+    }
+    catch(e){
+      console.log("error occured "+ e);
+    };
+    
+
+
+  
+
+}
+
+main()
+  
 
 
